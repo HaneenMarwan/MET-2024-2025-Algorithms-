@@ -1,0 +1,46 @@
+from itertools import permutations
+
+conflicts = {
+    100: [300, 200],
+    200: [100, 300],
+    300: [100, 200],
+}
+
+levels = {
+    1: [100, 200, 300],
+    2: [100, 200, 300],
+    3: [100, 200, 300],
+}
+
+def calculate_cost(order):
+    cost = 0
+    for i in range(len(order) - 1):
+        if order[i + 1] in conflicts.get(order[i], []):
+            cost += 1
+    return cost
+
+patterns = [
+    [1, 2, 3],
+    [3, 1, 2],
+    [2, 3, 1],
+    [1, 3, 2],
+    [2, 1, 3],
+    [3, 2, 1],
+]
+
+best_order = []
+min_cost = float('inf')
+
+
+for pattern in patterns:
+    order = []
+    for level in pattern:
+        order.extend(levels[level])
+    for perm in permutations(order):
+        cost = calculate_cost(perm)
+        if cost < min_cost:
+            min_cost = cost
+            best_order = perm
+
+print("أفضل ترتيب للمقررات الدراسية:", best_order)
+print("التكلفة النهائية:", min_cost)
